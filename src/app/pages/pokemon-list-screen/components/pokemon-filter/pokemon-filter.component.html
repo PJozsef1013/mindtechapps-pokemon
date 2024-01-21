@@ -1,0 +1,41 @@
+<form class="flex flex-col w-[361px] h-[218px] text-[13px]" [formGroup]="form">
+  <div class="font-bold text-grayOne leading-5 mb-[25px]">Filters</div>
+  <input
+    id="search"
+    class="border hover:border-grayFour mb-[32px] font-bold"
+    type="search"
+    formControlName="search"
+    placeholder="Search..."
+  />
+  <div class="flex flex-col gap-y-4">
+    <label for="pokemonTypes" class="font-bold leading-5 text-grayOne">
+      Pokemon types
+    </label>
+    <select
+      id="pokemonTypes"
+      name="pokemonTypes"
+      formControlName="pokemonType"
+      class="border border-grayTwo bg-white h-10 rounded-md mb-[32px] font-bold"
+    >
+      <option
+        *ngFor="let option of pokemonTypeOptions"
+        [value]="option.id"
+        class="font-bold leading-5"
+      >
+        {{ option.label | titlecase }}
+      </option>
+    </select>
+  </div>
+  <div class="flex gap-x-2">
+    <input
+      type="checkbox"
+      id="isOnlyCaught"
+      name="isOnlyCaught"
+      formControlName="isOnlyCaughtShown"
+      class="border border-grayTwo cursor-pointer"
+    />
+    <label class="leading-5 text-dark cursor-pointer" for="isOnlyCaught">
+      Only show caught Pokemons</label
+    >
+  </div>
+</form>
