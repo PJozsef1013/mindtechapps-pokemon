@@ -19,6 +19,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonDetailsScreenComponent {
+  isLoading$ = this.store.select(fromPokemon.selectIsLoading$);
   pokemon$: Observable<Pokemon | undefined> | undefined;
 
   constructor(

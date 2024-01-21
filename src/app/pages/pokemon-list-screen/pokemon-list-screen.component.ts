@@ -24,6 +24,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonListScreenComponent {
+  isLoading$ = this.store.select(fromPokemon.selectIsLoading$);
   pokemons$ = this.store.select(fromPokemon.selectPokemons$);
 
   pokemonsWithDetails$ = combineLatest([

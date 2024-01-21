@@ -1,5 +1,9 @@
-<app-pokemon-details
-  [pokemon]="pokemon$ | async"
-  (backToSearchClick)="onBackToSearchClick()"
-  (actionClick)="onActionClick($event)"
-></app-pokemon-details>
+<div class="flex h-full justify-center items-center">
+  <app-loading *ngIf="isLoading$ | async"></app-loading>
+  <app-pokemon-details
+    *ngIf="(isLoading$ | async) === false"
+    [pokemon]="pokemon$ | async"
+    (backToSearchClick)="onBackToSearchClick()"
+    (actionClick)="onActionClick($event)"
+  ></app-pokemon-details>
+</div>

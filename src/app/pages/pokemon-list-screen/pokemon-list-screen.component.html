@@ -1,5 +1,9 @@
 <div class="flex h-full justify-center items-center">
-  <div class="grid grid-cols-3 gap-x-[180.5px]">
+  <app-loading *ngIf="isLoading$ | async"></app-loading>
+  <div
+    *ngIf="(isLoading$ | async) === false"
+    class="grid grid-cols-3 gap-x-[180.5px]"
+  >
     <app-pokemon-filter
       (filterChange)="onFilterChange($event)"
     ></app-pokemon-filter>

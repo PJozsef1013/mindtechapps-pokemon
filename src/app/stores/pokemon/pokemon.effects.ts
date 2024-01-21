@@ -3,7 +3,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { ApiService, PokemonStatus } from '../../shared';
 import * as pokemonActions from './pokemon.actions';
-import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
+import { catchError, delay, map, mergeMap, of, switchMap, tap } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class PokemonEffects {
@@ -28,14 +29,6 @@ export class PokemonEffects {
       )
     );
   });
-
-  //TODO handle error
-  // public getPokemonsFail$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(pokemonActions.getPokemonsFail),
-  //     map((errorMsg) => )
-  //   );
-  // });
 
   public readonly getPokemonByUrl$ = createEffect(() => {
     return this.actions$.pipe(
@@ -64,14 +57,6 @@ export class PokemonEffects {
     );
   });
 
-  //TODO handle error
-  // public getPokemonByUrlFail$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(pokemonActions.getPokemonByUrlFail),
-  //     map((errorMsg) => )
-  //   );
-  // });
-
   public readonly getPokemon$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(pokemonActions.getPokemon),
@@ -87,7 +72,7 @@ export class PokemonEffects {
                 weight: response.weight,
                 height: response.height,
                 abilities: response.abilities.map(
-                  (ability: any) => ability.ability.name
+                  (ability) => ability.ability.name
                 ),
               },
             });
@@ -104,15 +89,27 @@ export class PokemonEffects {
     );
   });
 
-  // public getPokemonByUrlFail$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(pokemonActions.getPokemonByUrlFail),
-  //     map((errorMsg) => )
-  //   );
-  // });
+  public showErrorToast$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(
+          pokemonActions.getPokemonsFail,
+          pokemonActions.getPokemonByUrlFail,
+          pokemonActions.getPokemonFail
+        ),
+        tap((error) => this.showErrorMessage(error.errorMsg))
+      );
+    },
+    { dispatch: false }
+  );
 
   constructor(
     private readonly actions$: Actions,
-    private readonly apiService: ApiService
+    private readonly apiService: ApiService,
+    private readonly toastr: ToastrService
   ) {}
+
+  showErrorMessage(errorMsg: string): void {
+    this.toastr.error(errorMsg);
+  }
 }
