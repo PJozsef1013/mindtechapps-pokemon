@@ -4,10 +4,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { PokemonListScreenComponent } from './pokemon-list-screen.component';
 import { PokemonListScreenRoutingModule } from './pokemon-list-screen-routing.module';
-import { PokemonFilterComponent } from './components';
+import { PokemonFilterComponent, PokemonListComponent } from './components';
 
 @NgModule({
-  declarations: [PokemonListScreenComponent, PokemonFilterComponent],
+  declarations: [
+    PokemonListScreenComponent,
+    PokemonFilterComponent,
+    PokemonListComponent,
+  ],
   imports: [CommonModule, PokemonListScreenRoutingModule, ReactiveFormsModule],
   exports: [PokemonListScreenComponent],
 })

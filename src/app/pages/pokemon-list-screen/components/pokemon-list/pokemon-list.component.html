@@ -1,0 +1,42 @@
+<div *ngIf="pokemons" class="flex h-[519px] w-[413px]">
+  <div class="flex flex-col gap-y-4 text-[13px] leading-10 text-grayOne">
+    <div class="flex font-bold mb-4">
+      <div class="min-w-32 pl-4">Name</div>
+      <div class="min-w-32">Type</div>
+      <div>Status</div>
+    </div>
+    <div *ngFor="let pokemon of pokemons" class="flex gap-x-4">
+      <div
+        class="flex items-center border border-blue rounded-[7px] w-[315px] h-[33px] cursor-pointer"
+        [class.border-yellow]="pokemon.status === PokemonStatus.Caught"
+        (click)="onRowClick(pokemon.id)"
+      >
+        <div class="min-w-32 pl-4">
+          {{ pokemon.name }}
+        </div>
+        <div class="min-w-32">
+          {{ pokemon.type | titlecase }}
+        </div>
+        <div class="min-w-32 pr-4">
+          {{
+            pokemon.status === PokemonStatus.Free
+              ? "-"
+              : (pokemon.status | titlecase)
+          }}
+        </div>
+      </div>
+      <button
+        type="button"
+        class="flex justify-center items-center bg-blue w-[82px] h-[33px] rounded-[7px] text-white hover:bg-lightBlue"
+        [class.bg-yellow]="pokemon.status === PokemonStatus.Caught"
+        [class.hover:bg-lightYellow]="pokemon.status === PokemonStatus.Caught"
+        [class.hover:text-yellow]="pokemon.status === PokemonStatus.Caught"
+        (click)="onActionClick(pokemon.id)"
+      >
+        <div>
+          {{ pokemon.status === PokemonStatus.Free ? "Catch" : "Release" }}
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
