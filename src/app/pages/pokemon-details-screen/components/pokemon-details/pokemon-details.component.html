@@ -1,0 +1,62 @@
+<div *ngIf="pokemon" class="flex flex-col items-center justify-center h-full">
+  <div class="flex flex-col gap-y-[18px]">
+    <div
+      class="text-[21px] text-grayFive font-bold cursor-pointer hover:text-grayThree"
+      (click)="onBackToSearchClick()"
+    >
+      <div>Back to search</div>
+    </div>
+    <div class="flex gap-x-[79px]">
+      <img
+        class="h-[415px] w-[505px] border-[5px] border-blue"
+        [class.border-yellow]="pokemon.status === PokemonStatus.Caught"
+        [src]="
+          'https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/' +
+          pokemon.id +
+          '.svg'
+        "
+        alt="Pokemon profile picture"
+      />
+      <div class="flex flex-col gap-y-[62px]">
+        <div
+          class="flex flex-col text-[21px] text-grayFive [&>*:nth-child(odd)]:bg-graySix [&>*:nth-child(even)]:bg-lightYellow"
+        >
+          <div class="flex items-center gap-x-8 h-[50px] w-[277px] pl-[17px]">
+            <div class="min-w-[75px]">Name</div>
+            <div class="font-bold">{{ pokemon.name }}</div>
+          </div>
+          <div class="flex items-center gap-x-8 h-[50px] w-[277px] pl-[17px]">
+            <div class="min-w-[75px]">Weight</div>
+            <div class="font-bold">{{ pokemon.weight }}kg</div>
+          </div>
+          <div class="flex items-center gap-x-8 h-[50px] w-[277px] pl-[17px]">
+            <div class="min-w-[75px]">Height</div>
+            <div class="font-bold">{{ pokemon.height }}m</div>
+          </div>
+          <div class="flex items-center h-[120px] w-[277px] gap-x-8 pl-[17px]">
+            <div class="min-w-[75px]">Abilities</div>
+            <div class="font-bold">
+              <div *ngFor="let ability of pokemon.abilities | slice : 0 : 3">
+                {{ ability | titlecase }}
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-x-8 h-[50px] w-[277px] pl-[17px]">
+            <div class="min-w-[75px]">Status</div>
+            <div class="font-bold">{{ pokemon.status | titlecase }}</div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="bg-blue text-white w-full rounded-[7px] h-[33px] text-[13px] hover:bg-lightBlue"
+          [class.bg-yellow]="pokemon.status === PokemonStatus.Caught"
+          [class.hover:bg-lightYellow]="pokemon.status === PokemonStatus.Caught"
+          [class.hover:text-yellow]="pokemon.status === PokemonStatus.Caught"
+          (click)="onActionClick(pokemon.id)"
+        >
+          {{ pokemon.status === PokemonStatus.Free ? "Catch" : "Release" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
