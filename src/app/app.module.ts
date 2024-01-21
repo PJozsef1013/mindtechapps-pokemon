@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +15,7 @@ import { PokemonEffects, pokemonReducer } from './stores';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     StoreModule.forRoot({ pokemon: pokemonReducer }),
     EffectsModule.forRoot([PokemonEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument(),

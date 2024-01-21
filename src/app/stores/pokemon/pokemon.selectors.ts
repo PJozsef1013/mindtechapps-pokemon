@@ -9,6 +9,24 @@ const selectIsLoading$ = createSelector(
   ({ isLoading }) => isLoading
 );
 
+const selectPokemons$ = createSelector(
+  selectFeature,
+  ({ pokemons }) => pokemons
+);
+
+const selectPokemonsWithDetails$ = createSelector(
+  selectFeature,
+  ({ pokemonsWithDetails }) => pokemonsWithDetails
+);
+
+const selectPokemonFIlters$ = createSelector(
+  selectFeature,
+  ({ filters }) => filters
+);
+
 export const fromPokemon = {
   selectIsLoading$,
+  selectPokemons$,
+  selectPokemonsWithDetails$,
+  selectPokemonFIlters$,
 };
