@@ -23,7 +23,7 @@
         >
           <div class="flex items-center gap-x-8 h-[50px] w-[277px] pl-[17px]">
             <div class="min-w-[75px]">Name</div>
-            <div class="font-bold">{{ pokemon.name }}</div>
+            <div class="font-bold">{{ pokemon.name | titlecase }}</div>
           </div>
           <div class="flex items-center gap-x-8 h-[50px] w-[277px] pl-[17px]">
             <div class="min-w-[75px]">Weight</div>
@@ -43,7 +43,13 @@
           </div>
           <div class="flex items-center gap-x-8 h-[50px] w-[277px] pl-[17px]">
             <div class="min-w-[75px]">Status</div>
-            <div class="font-bold">{{ pokemon.status | titlecase }}</div>
+            <div class="font-bold">
+              {{
+                pokemon.status === PokemonStatus.Caught
+                  ? (pokemon.status | titlecase)
+                  : "-"
+              }}
+            </div>
           </div>
         </div>
         <button

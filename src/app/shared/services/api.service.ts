@@ -18,4 +18,10 @@ export class ApiService {
   getPokemonByUrl(url: string): Observable<PokemonResponse> {
     return this.http.get<PokemonResponse>(`${url}`);
   }
+
+  getPokemon(id: string): Observable<PokemonResponse> {
+    return this.http.get<PokemonResponse>(
+      `${environment.apiBaseUrl}pokemon/${id}`
+    );
+  }
 }

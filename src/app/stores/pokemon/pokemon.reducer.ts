@@ -17,6 +17,7 @@ export interface PokemonState {
   isLoading: boolean;
   pokemons?: PokemonWithUrl[];
   pokemonsWithDetails?: Pokemon[];
+  pokemon?: Pokemon;
   filters?: PokemonFilterOutputValues;
 }
 
@@ -24,6 +25,7 @@ const initialState: PokemonState = {
   isLoading: false,
   pokemons: undefined,
   pokemonsWithDetails: undefined,
+  pokemon: undefined,
   filters: undefined,
 };
 
@@ -31,6 +33,7 @@ export const pokemonReducer = createReducer(
   initialState,
   on(
     pokemonActions.getPokemons,
+    pokemonActions.getPokemon,
     pokemonActions.getPokemonByUrl,
     (state): PokemonState => ({
       ...state,
@@ -45,6 +48,15 @@ export const pokemonReducer = createReducer(
       pokemons,
     })
   ),
+  on(
+    pokemonActions.getPokemonSuccess,
+    (state, { pokemon }): PokemonState => ({
+      ...state,
+      isLoading: false,
+      pokemon,
+    })
+  ),
+
   on(
     pokemonActions.getPokemonByUrlSuccess,
     (state, { pokemon }): PokemonState => ({
@@ -67,6 +79,20 @@ export const pokemonReducer = createReducer(
     })
   ),
   on(
+    pokemonActions.setPokemonStatusOnDetailsScreen,
+    (state): PokemonState => ({
+      ...state,
+      pokemon: updatePokemonStatusInPokemon(state.pokemon),
+    })
+  ),
+  on(
+    pokemonActions.setPokemonStatusOnDetailsScreenAfterReload,
+    (state): PokemonState => ({
+      ...state,
+      pokemon: updatePokemonStatusOnDetailsScreenAfterReload(state.pokemon),
+    })
+  ),
+  on(
     pokemonActions.setFilters,
     (state, { filters }): PokemonState => ({
       ...state,
@@ -75,6 +101,7 @@ export const pokemonReducer = createReducer(
   ),
   on(
     pokemonActions.getPokemonsFail,
+    pokemonActions.getPokemonFail,
     pokemonActions.getPokemonByUrlFail,
     (state): PokemonState => ({
       ...state,
@@ -87,6 +114,13 @@ export const pokemonReducer = createReducer(
       ...state,
       pokemons: undefined,
       pokemonsWithDetails: undefined,
+    })
+  ),
+  on(
+    pokemonActions.clearPokemon,
+    (state): PokemonState => ({
+      ...state,
+      pokemon: undefined,
     })
   ),
   on(
@@ -156,4 +190,47 @@ const updatePokemonStatusInPokemonsWithDetails = (
   updateCaughtPokemonsIds(id);
 
   return updatedPokemonsWithDetails;
+};
+
+const updatePokemonStatusInPokemon = (
+  pokemon?: Pokemon
+): Pokemon | undefined => {
+  if (!pokemon) {
+    return;
+  }
+
+  const updatedPokemon = {
+    ...pokemon,
+    status:
+      pokemon.status === PokemonStatus.Free
+        ? PokemonStatus.Caught
+        : PokemonStatus.Free,
+  };
+
+  updateCaughtPokemonsIds(pokemon.id);
+
+  return updatedPokemon;
+};
+
+const updatePokemonStatusOnDetailsScreenAfterReload = (
+  pokemon?: Pokemon
+): Pokemon | undefined => {
+  if (!pokemon) {
+    return;
+  }
+
+  const caughtPokemonsIds = getCaughtPokemonsIds();
+
+  if (!caughtPokemonsIds) {
+    return;
+  }
+
+  const updatedPokemon = {
+    ...pokemon,
+    status: parseCaughtPokemonsIds(caughtPokemonsIds).includes(pokemon.id)
+      ? PokemonStatus.Caught
+      : pokemon.status,
+  };
+
+  return updatedPokemon;
 };

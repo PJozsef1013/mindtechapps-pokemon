@@ -72,6 +72,45 @@ export class PokemonEffects {
   //   );
   // });
 
+  public readonly getPokemon$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(pokemonActions.getPokemon),
+      switchMap(({ id }) =>
+        this.apiService.getPokemon(id).pipe(
+          map((response) => {
+            return pokemonActions.getPokemonSuccess({
+              pokemon: {
+                id: response.id,
+                name: response.name,
+                status: PokemonStatus.Free,
+                type: response.types[0].type.name,
+                weight: response.weight,
+                height: response.height,
+                abilities: response.abilities.map(
+                  (ability: any) => ability.ability.name
+                ),
+              },
+            });
+          }),
+          catchError(() =>
+            of(
+              pokemonActions.getPokemonFail({
+                errorMsg: 'An error occured!',
+              })
+            )
+          )
+        )
+      )
+    );
+  });
+
+  // public getPokemonByUrlFail$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(pokemonActions.getPokemonByUrlFail),
+  //     map((errorMsg) => )
+  //   );
+  // });
+
   constructor(
     private readonly actions$: Actions,
     private readonly apiService: ApiService

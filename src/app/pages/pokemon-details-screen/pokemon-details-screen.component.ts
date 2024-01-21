@@ -1,6 +1,16 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Observable, delay, filter, map, switchMap, tap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 
-import { PokemonStatus, PokemonType } from '../../shared';
+import { Pokemon, PokemonStatus, PokemonType } from '../../shared';
+import {
+  clearPokemon,
+  fromPokemon,
+  getPokemon,
+  setPokemonStatusOnDetailsScreen,
+  setPokemonStatusOnDetailsScreenAfterReload,
+} from '../../stores';
 
 @Component({
   selector: 'app-pokemon-details-screen',
@@ -9,13 +19,43 @@ import { PokemonStatus, PokemonType } from '../../shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonDetailsScreenComponent {
-  mockPokemon = {
-    id: '2',
-    name: 'Bulbasaur',
-    type: PokemonType.Bug,
-    status: PokemonStatus.Free,
-    weight: 200,
-    height: 180,
-    abilities: ['speed', 'power', 'fire'],
-  };
+  pokemon$: Observable<Pokemon | undefined> | undefined;
+
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly store: Store,
+    private readonly router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.getPokemon();
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(clearPokemon());
+  }
+
+  onBackToSearchClick(): void {
+    this.router.navigate(['pokemons']);
+  }
+
+  onActionClick(pokemonId: string): void {
+    this.store.dispatch(setPokemonStatusOnDetailsScreen({ id: pokemonId }));
+  }
+
+  private getPokemon(): void {
+    this.pokemon$ = this.route.paramMap.pipe(
+      map((paramMap) => paramMap.get('id')),
+      filter((id): id is string => !!id),
+      tap((id: string) => {
+        this.store.dispatch(getPokemon({ id }));
+      }),
+      delay(200),
+      switchMap((id: string) => {
+        this.store.dispatch(setPokemonStatusOnDetailsScreenAfterReload({ id }));
+
+        return this.store.select(fromPokemon.selectPokemon$);
+      })
+    );
+  }
 }

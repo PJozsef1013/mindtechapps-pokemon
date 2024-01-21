@@ -1,1 +1,5 @@
-<app-pokemon-details [pokemon]="mockPokemon"></app-pokemon-details>>
+<app-pokemon-details
+  [pokemon]="pokemon$ | async"
+  (backToSearchClick)="onBackToSearchClick()"
+  (actionClick)="onActionClick($event)"
+></app-pokemon-details>

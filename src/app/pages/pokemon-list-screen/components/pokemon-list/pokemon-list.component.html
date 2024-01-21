@@ -7,12 +7,12 @@
     </div>
     <div *ngFor="let pokemon of pokemons" class="flex gap-x-4">
       <div
-        class="flex items-center border border-blue rounded-[7px] w-[315px] h-[33px] cursor-pointer"
+        class="flex items-center border border-blue rounded-[7px] w-[315px] h-[33px] cursor-pointer hover:bg-gray-100"
         [class.border-yellow]="pokemon.status === PokemonStatus.Caught"
         (click)="onRowClick(pokemon.id)"
       >
         <div class="min-w-32 pl-4">
-          {{ pokemon.name }}
+          {{ pokemon.name | titlecase }}
         </div>
         <div class="min-w-32">
           {{ pokemon.type | titlecase }}
